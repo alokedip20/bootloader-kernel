@@ -1,4 +1,5 @@
 nasm -f bin boot_sect.asm -o boot_sect.bin
+#nasm kernelentry.asm -f elf -o kernelentry.o
 gcc -ffreestanding -c kernel.c -o kernel.o
 ld -o kernel.bin -Ttext 0x1000 kernel.o --oformat binary
 cat boot_sect.bin kernel.bin >OS_Image

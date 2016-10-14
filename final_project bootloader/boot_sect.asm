@@ -45,7 +45,7 @@ start:
 		db "CPU IS IN 16 BIT MODE PRESS ANY KEY TO SWITCH TO 32 BIT PROTECTED MODE AND LOAD KERNEL", 0
 		dw 0x0d0a
 	msg_protected:   
-		db "CPU SUCCESSFULLY SWITCHED INTO 32BIT PROTECTED MODE", 0
+		db "                                                            ", 0	;CREATE DUMMY SPACE FOR PRINTING STRING FROM KERNEL
 		dw 0x0d0a
 	status_msg: 
 		dw 0x0d0a 
