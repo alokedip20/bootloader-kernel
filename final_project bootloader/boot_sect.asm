@@ -12,6 +12,7 @@ start:
 	wait_input:
 		mov ah,0
 		int 16h
+		ret
 
 ;--------------------------------------INCLUDE EXTERNEL FILES TO MAKE THE CODE SMALLER----------------------------------------------------------
 	%include "print.asm"

@@ -15,13 +15,17 @@ disk_load:
 disk_error1:	
 	mov si,error_msg1
 	call print_string
+	jmp wait_input
 disk_error2:
 	mov si,error_msg2
 	call print_string
+	jmp wait_input
 error_msg1:
+	dw 0x0d0a
 	db "CAN NOT READ THE DISK",0
 	dw 0x0d0a	
 error_msg2:
+	dw 0x0d0a
 	db "READ SECTOR NOT EQUAL",0
 	dw 0x0d0a
 success:
