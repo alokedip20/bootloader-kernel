@@ -6,7 +6,7 @@ void os(){
 	i=k=0;
 	char *d=(char*)(0xb8000);
 //------------------------------------------ CLEAR THE SCREEN  ------------------------------------------------
-	while(k<80*12*2){
+	while(k<80*12*2){		//CLEAR ONLY FIRST 12 ROWS
 		d[k]=' ';		//REPLACE THE LETTER WITH BLANK TO MAKE IT EMPTY
 		d[k+1]=0x00;		//AS EACH CHARECTER IS OF SIZE 16BITS.
 		k+=2;
