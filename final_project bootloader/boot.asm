@@ -8,18 +8,18 @@ start:
 	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL
 	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.ams"
 	jmp $
-;---------------------------------------------------------------------------------------------------------------
+;---------------------------------------	WAIT FOR A KEY PRESS	------------------------------------------------------------------------
 	wait_input:
 		mov ah,0
 		int 16h
 		ret
 
 ;--------------------------------------INCLUDE EXTERNEL FILES TO MAKE THE CODE SMALLER----------------------------------------------------------
-	%include "print.asm"
-	%include "disk_load.asm"
-	%include "gdt.asm"		;THE GLOBAL DESCRIPTOR TABLE IS DEFINED IN THIS ASSEMBLY FILE
-	%include "print_string_pm.asm"	;PRINT THE STRING IN PROTECTED MODE DIRECTLY IN VIDEO BUFFER
-	%include "switch.asm"		;DEFINE THE PROCEDURE HOW TO SWITCH FROM REAL MODE TO PROTECTED MODE
+	%include "print/print.asm"
+	%include "disk_access/read_kernel.asm"
+	%include "protected_mode/gdt.asm"		;THE GLOBAL DESCRIPTOR TABLE IS DEFINED IN THIS ASSEMBLY FILE
+	%include "print/print_32_mode.asm"	;PRINT THE STRING IN PROTECTED MODE DIRECTLY IN VIDEO BUFFER
+	%include "protected_mode/switch.asm"		;DEFINE THE PROCEDURE HOW TO SWITCH FROM REAL MODE TO PROTECTED MODE
 ; ---------------------------------------------------------------------------------------------------------
 	[bits 16]
 	load_kernel:
@@ -28,13 +28,13 @@ start:
 		mov bx, kernel_pos      ;STORE THE KERNEL POSITION INTO BX REGISTER 
 		mov dh,2               ; READ 2 SECTORS FROM 2ND SECTOR THIS MAY VARY ACCORDING TO OUR KERNEL IMAGE SIZE
 		mov dl, [boot_drive]    
-		call  disk_load		;READ THE 2 SECTORS FROM BOOT-DRIVE AND LOAD THEM TO ES:BX REGISTER
+		call  read_sector		;READ THE 2 SECTORS FROM BOOT-DRIVE AND LOAD THEM TO ES:BX REGISTER
 		ret
 ;------------------------------------------------------------------------------------------------------------
 	[bits  32]
 	start_protectedMode:
 		mov ebx,msg_protected 	;STORE THE MESSEGE(EMPTY STRING JUST TO CREATE SPACE) IN ebx REGISTER IN PM MODE
-		call  print_string_pm
+		call  adv_print
 		mov eax,0x1000  	;
 		mov ebx,kernel_pos 
 		cmp ebx,eax		;CHECK IF THE KERNEL LOADING POSITION IS 0X1000	

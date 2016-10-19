@@ -1,6 +1,6 @@
 nasm -f bin boot.asm -o boot.bin
 #nasm kernelentry.asm -f elf -o kernelentry.o
-gcc -ffreestanding -c kernel.c -o kernel.o
+gcc -ffreestanding -c ./kernel/kernel.c -o kernel.o
 ld -o kernel.bin -Ttext 0x1000 kernel.o --oformat binary
 cat boot.bin kernel.bin >OS_Image
 rm boot.bin kernel.bin kernel.o
