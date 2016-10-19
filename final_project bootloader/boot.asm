@@ -1,6 +1,6 @@
 kernel_pos  equ 0x1000			;THIS IS THE MEMORY OFFSET WHERE THE BIOS LOAD THE KERNEL
 mov [boot_drive], dl 			;STORE THE DRIVE WHERE THE BOOTSECTOR PROGRAMME RESIDES
-start:
+main:
 	[org 0x7c00]
 	mov si,msg_Real 		;STATUS MESSEGE THAT INDICATE THE KERNEL POSITION (16 OR 32BIT MODE)
 	call  print_string      	;PRINT THE STATUS MESSEGE	DEFINED IN "print.asm"
@@ -35,27 +35,27 @@ start:
 	start_protectedMode:
 		mov ebx,msg_protected 	;STORE THE MESSEGE(EMPTY STRING JUST TO CREATE SPACE) IN ebx REGISTER IN PM MODE
 		call  adv_print
-		mov eax,0x1000  	;
+		mov eax,0x1000  	
 		mov ebx,kernel_pos 
 		cmp ebx,eax		;CHECK IF THE KERNEL LOADING POSITION IS 0X1000	
 		jne error3		;IF NOT EQUAL THEN IT WILL STUCK TO INFINITE LOOP
 		call  kernel_pos      	;THIS WILL CALL THE FUNCTION WRITTEN IN C LOADED AT LOCATION kernel_pos=0x1000
 		jmp $                   ;INFINITE LOOP
 
-;--------------------------------------------GLOBAL VARIABLES DECLARATIONS------------------------------------------
 	error3:
 		jmp start_protectedMode
+;--------------------------------------------GLOBAL VARIABLES DECLARATIONS----------------------------------------------------------
 	boot_drive:	
 		db 0
 	msg_Real:    
 		db "CPU IS IN 16 BIT MODE :) PRESS ANY KEY TO LOAD THE KERNEL .....", 0
 		dw 0x0d0a
 	msg_protected:   
-		db "                                                            ", 0	;CREATE DUMMY SPACE FOR PRINTING STRING FROM KERNEL
+		db " KERNEL IS NOT LINKED TO PROPER ADDRESS                  ", 0	;CREATE DUMMY SPACE FOR PRINTING STRING FROM KERNEL
 		dw 0x0d0a
 	status_msg: 
 		dw 0x0d0a 
-		db "Loading  KERNEL WRITTEN IN HIGHER LEVEL LANGUAGE (C)....", 0
+		db "LOADING  KERNEL WRITTEN IN HIGHER LEVEL LANGUAGE (C)....", 0
 		dw 0x0d0a
 	times  510-($-$$) db 0		;THIS IS THE PADDING OF 510 BYTES RESTS ARE FILLED WITH ZEROS
 	dw 0xaa55			;THIS  IS THE LAST TWO BYTES AA 55 AS BOOT-SIGNATURE
