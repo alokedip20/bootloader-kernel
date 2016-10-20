@@ -2,17 +2,12 @@ kernel_pos  equ 0x1000			;THIS IS THE MEMORY OFFSET WHERE THE BIOS LOAD THE KERN
 mov [boot_drive], dl 			;STORE THE DRIVE WHERE THE BOOTSECTOR PROGRAMME RESIDES
 main:
 	[org 0x7c00]
-	call print_real
+	mov si,msg_Real 		;STATUS MESSEGE THAT INDICATE THE KERNEL POSITION (16 OR 32BIT MODE)
 	call  print_string      	;PRINT THE STATUS MESSEGE	DEFINED IN "print.asm"
 	call wait_input			;TAKE THE KEYBOARD INPUT TO START LOADING THE KERNEL
 	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL
 	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.ams"
 	jmp $
-;---------------------------------------- PRINT MSG IN REAL MODE ------------------------------------------------------------------	
-	print_real:
-		mov si,msg_Real
-		call print_string
-		ret
 ;---------------------------------------	WAIT FOR A KEY PRESS	------------------------------------------------------------------------
 	wait_input:
 		mov ah,0
@@ -25,17 +20,17 @@ main:
 	%include "protected_mode/gdt.asm"		;THE GLOBAL DESCRIPTOR TABLE IS DEFINED IN THIS ASSEMBLY FILE
 	%include "print/print_32_mode.asm"	;PRINT THE STRING IN PROTECTED MODE DIRECTLY IN VIDEO BUFFER
 	%include "protected_mode/switch.asm"		;DEFINE THE PROCEDURE HOW TO SWITCH FROM REAL MODE TO PROTECTED MODE
-;---------------------------------------------------------------------------------------------------------
+; ---------------------------------------------------------------------------------------------------------
 	[bits 16]
 	load_kernel:
 		mov si,status_msg    	
 		call  print_string	;PRINT THE STATUS MESSEGE
 		mov bx, kernel_pos      ;STORE THE KERNEL POSITION INTO BX REGISTER 
-		mov dh,2               	; READ 2 SECTORS FROM 2ND SECTOR THIS MAY VARY ACCORDING TO OUR KERNEL IMAGE SIZE
+		mov dh,2               ; READ 2 SECTORS FROM 2ND SECTOR THIS MAY VARY ACCORDING TO OUR KERNEL IMAGE SIZE
 		mov dl, [boot_drive]    
 		call  read_sector		;READ THE 2 SECTORS FROM BOOT-DRIVE AND LOAD THEM TO ES:BX REGISTER
 		ret
-;-------------------------------------------------------------------------------------------------------------------------------
+;------------------------------------------------------------------------------------------------------------
 	[bits  32]
 	start_protectedMode:
 		mov ebx,msg_protected 	;STORE THE MESSEGE(EMPTY STRING JUST TO CREATE SPACE) IN ebx REGISTER IN PM MODE
@@ -44,10 +39,9 @@ main:
 		mov ebx,kernel_pos 
 		cmp ebx,eax		;CHECK IF THE KERNEL LOADING POSITION IS 0X1000	
 		jne error3		;IF NOT EQUAL THEN IT WILL STUCK TO INFINITE LOOP
-		call kernel_pos      	;THIS WILL CALL THE FUNCTION WRITTEN IN C LOADED AT LOCATION kernel_pos=0x1000
+		call  kernel_pos      	;THIS WILL CALL THE FUNCTION WRITTEN IN C LOADED AT LOCATION kernel_pos=0x1000
 		jmp $                   ;INFINITE LOOP
 
-;---------------------------------------------------------------------------------------------------------------------------------
 	error3:
 		jmp start_protectedMode
 ;--------------------------------------------GLOBAL VARIABLES DECLARATIONS----------------------------------------------------------
