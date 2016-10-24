@@ -6,6 +6,8 @@ main:
 	call  print_string      	;PRINT THE STATUS MESSEGE	DEFINED IN "print.asm"
 	call wait_input			;TAKE THE KEYBOARD INPUT TO START LOADING THE KERNEL
 	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL
+	mov ax,13h			;SWITCH TO VIDEO MODE BEFORE ENTERING TO PROTECTED MODE USING 13/10h
+	int 10h
 	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.ams"
 	jmp $
 ;---------------------------------------- PRINT MSG IN REAL MODE ------------------------------------------------------------------	
@@ -23,7 +25,6 @@ main:
 	%include "print/print.asm"
 	%include "disk_access/read_kernel.asm"
 	%include "protected_mode/gdt.asm"		;THE GLOBAL DESCRIPTOR TABLE IS DEFINED IN THIS ASSEMBLY FILE
-	%include "print/print_32_mode.asm"		;PRINT THE STRING IN PROTECTED MODE DIRECTLY IN VIDEO BUFFER
 	%include "protected_mode/switch.asm"		;DEFINE THE PROCEDURE HOW TO SWITCH FROM REAL MODE TO PROTECTED MODE
 
 ;-------------------------------------------------------;LOAD THE KERNEL AND START EXECUTING THE KERNEL ----------------------------------------
@@ -35,9 +36,6 @@ main:
 		db 0
 	msg_Real:    
 		db "CPU IS IN 16 BIT MODE :) PRESS ANY KEY TO LOAD THE KERNEL .....", 0
-		dw 0x0d0a
-	msg_protected:   
-		db "KERNEL IS NOT LINKED TILL NOW                               ", 0	;CREATE DUMMY SPACE FOR PRINTING STRING FROM KERNEL
 		dw 0x0d0a
 	status_msg: 
 		dw 0x0d0a 
