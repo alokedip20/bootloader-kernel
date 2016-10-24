@@ -7,7 +7,7 @@ void os(){
 	int row,col,offset;
 	offset=20;
 	int count=0;
-	while(count<height-2*offset){
+	while(count<height-offset){
 		row=col=offset;
 		while(row<height-offset){
 			video[MAX_COLS*row+col]=color;			//LEFT SIDE
