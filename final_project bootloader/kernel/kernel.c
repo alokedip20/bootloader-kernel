@@ -2,12 +2,12 @@
 void os(){
 	char *video=(char*)(0xA0000);					//STARTING ADDRESS OF VIDEO MEMORY
 	unsigned char color=1;
-	int height=199;
-	int width=319;
+	int height=200;
+	int width=320;
 	int row,col,offset;
 	offset=20;
 	int count=0;
-	while(count<height){
+	while(count<height-2*offset){
 		row=col=offset;
 		while(row<height-offset){
 			video[MAX_COLS*row+col]=color;			//LEFT SIDE
