@@ -24,7 +24,7 @@ void os(){
 			video[MAX_COLS*row+col]=color;			//BOTTOM SIDE
 			col++;
 		}
-		col=width-offset;
+		col=width-offset-1;
 		row=offset;
 		while(row<height-offset){
 			video[MAX_COLS*row+col]=color;			//RIGHT SIDE
