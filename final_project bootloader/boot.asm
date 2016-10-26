@@ -1,16 +1,16 @@
-kernel_pos  equ 0x1000			;THIS IS THE MEMORY OFFSET WHERE THE BIOS LOAD THE KERNEL
+kernel_pos  equ 0x1000			;THIS IS ToHE MEMORY OFFSET WHERE THE BIOS LOAD THE KERNEL
 mov [boot_drive], dl 			;STORE THE DRIVE WHERE THE BOOTSECTOR PROGRAMME RESIDES
 main:
 	[org 0x7c00]
 	call print_real
 	call  print_string      	;PRINT THE STATUS MESSEGE	DEFINED IN "print.asm"
 	call wait_input			;TAKE THE KEYBOARD INPUT TO START LOADING THE KERNEL
-	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL
+	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL DEFINED IN "kernel_start.asm"
 	mov ax,13h			;SWITCH TO VIDEO MODE BEFORE ENTERING TO PROTECTED MODE USING 13/10h
 	int 10h
-	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.ams"
+	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.asm"
 	jmp $
-;---------------------------------------- PRINT MSG IN REAL MODE ------------------------------------------------------------------	
+;----------------------------------------          PRINT MSG IN REAL MODE ------------------------------------------------------------------	
 	print_real:
 		mov si,msg_Real
 		call print_string
