@@ -3,9 +3,9 @@ mov [boot_drive], dl 			;STORE THE DRIVE WHERE THE BOOTSECTOR PROGRAMME RESIDES
 main:
 	[org 0x7c00]
 	call print_real
-	call  print_string      	;PRINT THE STATUS MESSEGE	DEFINED IN "print.asm"
 	call wait_input			;TAKE THE KEYBOARD INPUT TO START LOADING THE KERNEL
 	call  load_kernel       	;FUNCTION TO LOAD THE KERNEL DEFINED IN "kernel_start.asm"
+	call wait_input
 	mov ax,13h			;SWITCH TO VIDEO MODE BEFORE ENTERING TO PROTECTED MODE USING 13/10h
 	int 10h
 	call  switch_to_pm      	;SWITCH FROM REAL MODE TO PROTEDTED MODE DEFINED IN "switch.asm"
