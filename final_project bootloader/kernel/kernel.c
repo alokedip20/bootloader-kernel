@@ -34,5 +34,17 @@ void os(){
 		count++;
 		offset+=5;
 	}
+/*
+	char str[]="Alokedip choudhuri\n";
+	char *text=(char*)(0xb8000);
+	int i=0;
+	int j=0;
+	while(str[j]!='\n'){
+		text[i]=str[j];
+		i+=2;
+		j++;
+	}
+*/
 }
+
 
